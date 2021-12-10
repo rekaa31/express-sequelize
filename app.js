@@ -1,19 +1,29 @@
 const express = require("express")
 const app = express()
 const TODO_MODEL = require('./models').tbl_todo_lists
-
+const USER_MODEL = require('./models').tbl_users
 app.use(express.json())
 
 // Endpoint Get All Todo
 app.get('/todo', (req, res) => {
-    TODO_MODEL.findAll().then(result => {
+    TODO_MODEL.findAll({
+        include : [
+            {
+                model : USER_MODEL,
+                required : false,
+                attributes : ['id','name']
+            }
+        ]
+    }).then(result => {
         res.json(
             {
                 message : "OK",
                 data : result
             }
         )
-    })
+    }).catch(error => res.json({
+        message:error.message
+    }))
 })
 
 // Endpoint Get Todo by ID
@@ -40,7 +50,8 @@ app.post('/todo', async (req, res) =>{
     const body = req.body
     const todo = {
         name_todo : body['name_todo'],
-        desc_todo : body['desc_todo']
+        desc_todo : body['desc_todo'],
+        createdBy : body['createdBy']
     }
 
     try {

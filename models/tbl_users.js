@@ -3,31 +3,27 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class tbl_todo_lists extends Model {
+  class tbl_users extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.tbl_users, {
-        foreignKey : 'createdBy',
-      })
+
     }
   };
-  tbl_todo_lists.init({
+  tbl_users.init({
     id: {
       type : DataTypes.INTEGER,
       primaryKey : true,
       allowNull: false,
       autoIncrement: true
     },
-    name_todo: DataTypes.STRING,
-    createdBy: DataTypes.INTEGER,
-    desc_todo: DataTypes.TEXT
+    name: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'tbl_todo_lists',
+    modelName: 'tbl_users',
   });
-  return tbl_todo_lists;
+  return tbl_users;
 };
